@@ -6,9 +6,9 @@
     # username for the admin user
     admin_username: "__ADMIN__"
     # password for the admin user
-    admin_password: "__ADMIN_PASS__"
+    admin_password: "__PASSWORD__"
     # name of the site (can be changed later)
-    site_name: "__NAME__"
+    site_name: "__SITENAME__"
   }
 
   # the domain name of your instance (eg "lemmy.ml")

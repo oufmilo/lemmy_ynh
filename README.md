@@ -1,15 +1,12 @@
+# Lemmy for YunoHost
 
-
-# Lemmy app for YunoHost
 **Warning:** This app uses Docker. YunoHost do not encourages to use black box container technologies like Docker and Ansible.
 
 Then why this package uses Docker?
 It's because the developers of the core app do not support simple installation. And packaging without documentaion is time consuming.
 
-[![Integration level](https://dash.yunohost.org/integration/Lemmy.svg)](https://dash.yunohost.org/appci/app/lemmy) ![](https://ci-apps.yunohost.org/ci/badges/lemmy.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/lemmy.maintain.svg)
-
+[![Integration level](https://dash.yunohost.org/integration/Lemmy.svg)](https://dash.yunohost.org/appci/app/lemmy) ![](https://ci-apps.yunohost.org/ci/badges/lemmy.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/lemmy.maintain.svg)  
 [![Install Lemmy with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=lemmy)
-
 
 > *This package allows you to install Lemmy quickly and simply on a YunoHost server.
 If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.*
@@ -29,14 +26,13 @@ Lemmy is similar to sites like Reddit, Lobste.rs, Raddle, or Hacker News: you su
 
 ## Configuration
 
-Lemmy require full domain path to be instlled. Eg. lemmy.domain.tld
+Lemmy require full domain path to be instlled. Eg. `lemmy.domain.tld`
 
 The admin username and password will be sent to the admin of the YunoHost through mail.
 
 ## Documentation
 
  * Official documentation: https://join.lemmy.ml/docs/en/index.html
-
 
 ## YunoHost specific features
 
@@ -61,14 +57,11 @@ Can the app be used by multiple users? Yes
 
 ## Developer info
 
-**Only if you want to use a testing branch for coding, instead of merging directly into master.**
 Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/lemmy_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
 ```
 sudo yunohost app install https://github.com/YunoHost-Apps/lemmy_ynh/tree/testing --debug
-
 or
-
 sudo yunohost app upgrade lemmy -u https://github.com/YunoHost-Apps/lemmy_ynh/tree/testing --debug
 ```

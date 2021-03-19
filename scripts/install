@@ -95,13 +95,19 @@ ynh_script_progression --message="Setting up source files..." --weight=1
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 
 mkdir "$final_path"
-cp -f ../conf/docker-compose.yml "$final_path/docker-compose.yml"
-cp -f ../conf/lemmy.hjson "$final_path/lemmy.hjson"
-cp -f ../conf/iframely.config.local.js "$final_path/iframely.config.local.js"
+#=================================================
+# MODIFY A CONFIG FILE
+#=================================================
+
+ynh_add_config --template="../conf/lemmy.hjson" --destination="$final_path/lemmy.hjson"
+ynh_add_config --template="../conf/lemmy.hjson" --destination="$final_path/docker-compose.yml"
+ynh_add_config --template="../conf/iframely.config.local.js" --destination="$final_path/iframely.config.local.js"
+
 pushd "$final_path"
 	mkdir -p volumes/pictrs
 	chown -R 991:991 volumes/pictrs
 popd
+
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
@@ -111,31 +117,11 @@ ynh_script_progression --message="Configuring NGINX web server..."  --weight=1
 ynh_add_nginx_config 'port_lemmy port_ui port_pictrs port_iframely'
 
 #=================================================
-# MODIFY A CONFIG FILE
-#=================================================
-
-
-
-ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/lemmy.hjson"
-ynh_replace_string --match_string="__ADMIN_PASS__" --replace_string="$password" --target_file="$final_path/lemmy.hjson"
-ynh_replace_string --match_string="__NAME__" --replace_string="$sitename" --target_file="$final_path/lemmy.hjson"
-ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain" --target_file="$final_path/lemmy.hjson"
-ynh_replace_string --match_string="__RANDOM__" --replace_string="$random" --target_file="$final_path/lemmy.hjson"
-ynh_replace_string --match_string="__PORT__LEMMY__" --replace_string="$port_lemmy" --target_file="$final_path/docker-compose.yml"
-ynh_replace_string --match_string="__PORT_UI__" --replace_string="$port_ui" --target_file="$final_path/docker-compose.yml"
-ynh_replace_string --match_string="__PORT_PICTRS__" --replace_string="$port_pictrs" --target_file="$final_path/docker-compose.yml"
-ynh_replace_string --match_string="__PORT_IFRAMELY__" --replace_string="$port_iframely" --target_file="$final_path/docker-compose.yml"
-ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain" --target_file="$final_path/iframely.config.local.js"
-
-
-#=================================================
 # SETUP SSOWAT
 #=================================================
 ynh_script_progression --message="Configuring permissions..." --weight=1
 
-
 ynh_permission_update --permission="main" --add="visitors"
-
 
 #=================================================
 # RELOAD NGINX
@@ -144,12 +130,11 @@ ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
-
 #=================================================
 # Run Lemmy through Docker
 #=================================================
-cd "$final_path" && docker-compose up -d
 
+(cd "$final_path" && docker-compose up -d)
 
 #=================================================
 # SEND A README FOR THE ADMIN
@@ -166,7 +151,6 @@ Your credentials for the admin panel are:
 If you facing an issue or want to improve Lemmy, please open a new issue in this project: https://github.com/YunoHost-Apps/lemmy_ynh/issues"
 
 ynh_send_readme_to_admin "$message"
-
 
 #=================================================
 # END OF SCRIPT

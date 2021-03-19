@@ -24,7 +24,7 @@ ynh_abort_if_errors
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..."  --weight=1
+ynh_script_progression --message="Loading installation settings..." --weight=1
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -36,7 +36,7 @@ version=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | 
 #=================================================
 # CHECK IF THE APP CAN BE RESTORED
 #=================================================
-ynh_script_progression --message="Validating restoration parameters..."  --weight=1
+ynh_script_progression --message="Validating restoration parameters..." --weight=1
 
 ynh_webpath_available --domain=$domain --path_url=$path_url \
 	|| ynh_die --message="Path not available: ${domain}${path_url}"
@@ -54,17 +54,14 @@ ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 #=================================================
 # RESTORE THE APP MAIN DIR
 #=================================================
-ynh_script_progression --message="Restoring the app main directory..."  --weight=1
+ynh_script_progression --message="Restoring the app main directory..." --weight=1
 
 ynh_restore_file --origin_path="$final_path"
-
 
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
 ynh_script_progression --message="Installing dependencies..." --weight=1
-
-#ynh_install_app_dependencies $pkg_dependencies
 
 # Install Docker and compose
 curl -sSL https://get.docker.com | sh
@@ -76,14 +73,15 @@ curl -L https://github.com/docker/compose/releases/download/${version}/docker-co
 #=================================================
 # Run Lemmy through Docker
 #=================================================
-cd "$final_path" && docker-compose up -d
+
+(cd "$final_path" && docker-compose up -d)
 
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
 # RELOAD NGINX AND PHP-FPM
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..."  --weight=1
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
@@ -91,4 +89,4 @@ ynh_systemd_action --service_name=nginx --action=reload
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Restoration completed for $app"  --last
+ynh_script_progression --message="Restoration completed for $app" --last
